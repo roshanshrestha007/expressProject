@@ -15,6 +15,7 @@ const store = new Conf();
 // })
 
 const router = new express.Router();
+const loggedInStatus = True;
 
 // app.use(require('./models/User'));
 
@@ -180,13 +181,6 @@ router.route('/new')
          res.redirect(`/login`);
 
         }
-
-
-        
-
-
-
-
     })
 
 
@@ -228,7 +222,7 @@ router.route('/:userID')
             const DisPwd = data[ind].pswd1;
 
 
-            res.render('user',{userName: req.params.userID, email: DisEmail, phno: DisPhno, password: DisPwd});
+            res.render('user',{userName: req.params.userID, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message')});
 
         }
         else{
@@ -271,30 +265,35 @@ router.route('/:userID')
             }
             else{
                 var userFlg = '0';
-                }
+            }
         }
 
         console.log("\nthe users index is:" + store.get('index'));
         usrs[store.get('index')].username = updUserName;
         usrs[store.get('index')].email = updUserEmail;
         usrs[store.get('index')].phno = updUserPhone;
+
        //req.params.userID = updUserName;
         console.log(usrs);
         store.set('userArray', JSON.stringify(usrs));
         console.log("\n\n This is the array after updating");
         console.log(JSON.parse(store.get('userArray'|| '[]')))
         console.log("user before",updUserName);
+        
+        req.flash('message', 'Success!')
+        
+        
 
-        res.redirect(`/${updUserName}`);
+        //res.redirect(`/${updUserName}`);
         console.log("user after",updUserName);
 
-        // res.render('user',{userName: updUserName, email: updUserEmail, phno: updUserPhone},{
+        //res.render('user',{userName: updUserName, email: updUserEmail, psw1 : usrs[store.get('index')].psw1, phno: updUserPhone, message : req.flash('message')})
         //     alert: {
         //         type: 'warning',
         //         title: 'User Updated',
         //     }
         // });
-        // res.redirect(`/${updUserName}`);
+        res.redirect(`/${updUserName}`);
 
 
 })

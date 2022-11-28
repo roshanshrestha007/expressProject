@@ -1,7 +1,6 @@
- {{#if alert}}
-        <div class="alert alert-{{alert.type}}" role="alert">
-            <h4 class="alert-heading">{{alert.title}}</h4>
-            <p>{{alert.message}}</p>
+ {{#if message}}
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">{{{message}}}</h4>
         </div>
         {{/if}}
 

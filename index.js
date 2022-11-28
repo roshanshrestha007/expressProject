@@ -3,10 +3,20 @@ const handlebars = require('express-handlebars')
 const path = require('path');
 const bodyParser = require('body-parser');
 const app = express();
+const session = require('express-session')
+const flush = require('connect-flash')
 
 app.use(bodyParser.urlencoded({extended: false}))
 
 app.use(bodyParser.json())
+app.use(session({
+    secret: 'secret',
+    cookie: {maxAge : 6000},
+    resave: false,
+    saveUninitialized: false
+}))
+
+app.use(flush());
 
 const hb_inst = handlebars.create({
     extname: '.handlebars',

@@ -18,7 +18,6 @@ app.use(session({
 
 app.use(flush());
 
-
 const hb_inst = handlebars.create({
     extname: '.handlebars',
     compilerOptions: {

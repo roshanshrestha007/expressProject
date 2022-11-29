@@ -8,6 +8,7 @@ const store = new Conf();
 
 
 const router = new express.Router();
+const loggedInStatus = True;
 
 
 
@@ -178,13 +179,6 @@ router.route('/new')
          res.redirect('login');
 
         }
-
-
-        
-
-
-
-
     })
 
 
@@ -271,7 +265,7 @@ router.route('/:userID')
             }
             else{
                 var userFlg = '0';
-                }
+            }
         }
 
         console.log("\nthe users index is:" + store.get('index'));
@@ -283,6 +277,10 @@ router.route('/:userID')
         console.log("\n\n This is the array after updating");
         console.log(JSON.parse(store.get('userArray'|| '[]')))
         console.log("user before",updUserName);
+        
+        req.flash('message', 'Success!')
+        
+        
 
         req.flash('message', 'Success!')
 

@@ -1,4 +1,4 @@
-           {{#if message}}
+{{#if message}}
         <div class="alert alert-success" role="alert">
             <h4 class="alert-heading">{{{message}}}</h4>
         </div>
@@ -10,6 +10,13 @@
             <br>
 
             <form method = "POST" class="was-validated">
+
+              <div class="mb-3 mt-3">
+                  <label for="exampleInputEmail1">UniqueID:</label>
+                  <input type="text" class="form-control" id="uniqid" value={{userID}} aria-describedby="emailHelp" name = "upduuid" readonly>
+                 
+    
+                </div>
                 <div class="mb-3 mt-3">
                   <label for="exampleInputEmail1">Username:</label>
                   <input type="text" class="form-control" id="username" value={{userName}} aria-describedby="emailHelp" name = "upduname" required>
@@ -46,4 +53,3 @@
 
         </div>
         </div>
- 

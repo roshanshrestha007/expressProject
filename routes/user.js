@@ -8,7 +8,7 @@ const { default: Conf } = require('conf');
 const store = new Conf();
 
 
-store.clear();
+//store.clear();
 
 const router = new express.Router();
 //const loggedInStatus = True;
@@ -260,7 +260,7 @@ router.route('/:userID')
             const uName = data[ind].username;
 
             res.render('user', {
-                logged: '1', userID: uniqid, userName: uName, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message')
+                logged: '1', userID: uniqid, userName: uName, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message'),  failumessage: req.flash('failumessage'), failemessage: req.flash('failemessage')
             });
 
         }
@@ -337,11 +337,11 @@ router.route('/:userID')
             }
 
             if (updflag === '1') {
-                req.flash('message', 'Username is already taken')
+                req.flash('failumessage', 'Username is already taken')
                 res.redirect(`/${uidz}`);
             }
             else if (updflag === '2') {
-                req.flash('message', 'Email is already taken')
+                req.flash('failemessage', 'Email is already taken')
                 res.redirect(`/${uidz}`);
             }
             else if(updflag === '0'){

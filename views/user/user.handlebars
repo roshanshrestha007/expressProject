@@ -4,6 +4,19 @@
         </div>
         {{/if}}
 
+        {{#if failumessage}}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">{{{failumessage}}}</h4>
+        </div>
+        {{/if}}
+
+
+        {{#if failemessage}}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">{{{failemessage}}}</h4>
+        </div>
+        {{/if}}
+
             <div class="container">
             <div class="box justify-content-center">
             <h1 class="display-4 page-header">Update Information</h1>

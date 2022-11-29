@@ -71,9 +71,11 @@ router.route('/login')
                 var flg = '0';
             }
         }
+        indy = store.get('index')
+        var uids=data[indy].uniqId
 
         if (flg == '1') {
-            res.redirect(`/${Login_uname}`);
+            res.redirect(`/${uids}`);
         }
         else if (flg == '0') {
             res.render('login', {
@@ -201,8 +203,9 @@ router.route('/new')
 router.route('/:userID')
     .get((req, res) => {
         console.log(req.params.userID);
-        const userName = req.params.userID;
-        if (userName === '') {
+
+        const userids = req.params.userID;
+        if (userids === '') {
         // console.log("User Doesn't exist");
             res.render('404', {
                 alert: {
@@ -213,12 +216,12 @@ router.route('/:userID')
 
 
         }
-        console.log(userName);
+        console.log(userids);
 
         var data = JSON.parse(store.get('userArray') || '[]');
 
         for (let i = 0; i < data.length; i++) {
-            if (userName === data[i].username) {
+            if (userids === data[i].uniqId) {
                 store.set('index', i);
                 console.log("success");
                 var UseFlg = '1';
@@ -239,9 +242,10 @@ router.route('/:userID')
             const DisPhno = data[ind].phno;
             console.log(DisPhno);
             const DisPwd = data[ind].pswd1;
+            const uName = data[ind].username;
 
             res.render('user', {
-                logged: '1', userID: uniqid, userName: req.params.userID, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message')
+                logged: '1', userID: uniqid, userName: uName, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message')
             });
 
         }
@@ -296,7 +300,7 @@ router.route('/:userID')
             console.log("hare ram hare ram\n");
             const indx = store.get('index');
             console.log(usrs[indx].username);
-            var name = usrs[indx].username;
+            var uidz = usrs[indx].uniqId;
 
             for (let j = 0; j < usrs.length; j++) {
                 if ((usrs[j].username === updUserName ) && (upduuid !== usrs[j].uniqId)) {
@@ -319,11 +323,11 @@ router.route('/:userID')
 
             if (updflag === '1') {
                 req.flash('message', 'Username is already taken')
-                res.redirect(`/${name}`);
+                res.redirect(`/${uidz}`);
             }
             else if (updflag === '2') {
                 req.flash('message', 'Email is already taken')
-                res.redirect(`/${name}`);
+                res.redirect(`/${uidz}`);
             }
             else if(updflag === '0'){
                 console.log("/n/n/n Updating........................")
@@ -340,19 +344,19 @@ router.route('/:userID')
             req.flash('message', 'User Successfully updated!')
 
 
-            res.redirect(`/${updUserName}`);
+            res.redirect(`/${upduuid}`);
             console.log("user after", updUserName);
 
             }
             else{
                 req.flash('message', 'Some error occured')
-                res.redirect(`/${name}`);
+                res.redirect(`/${uidz}`);
             }
 
         }
         else{
             req.flash('message', 'Unique id doesnot match');
-            res.redirect(`/${name}`);
+            res.redirect(`/${uidz}`);
 
 
 

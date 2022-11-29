@@ -36,6 +36,7 @@ app.use(require('./routes/user'));
 
 
 app.use((req,res)=>{
+    res.status(404);
     res.render('404',{
         alert: {
             type: 'warning',

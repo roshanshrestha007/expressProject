@@ -3,6 +3,7 @@ const app = express();
 const uuid = require('uuid');
 
 
+
 const { default: Conf } = require('conf');
 
 const store = new Conf();
@@ -17,6 +18,7 @@ const router = new express.Router();
 
 router.route('/login')
     .get((req, res) => {
+        //loginget();
         var data = JSON.parse(store.get('userArray') || '[]');
         console.log(' inside login \n' + data);
         var ind = store.get('index');
@@ -47,6 +49,7 @@ router.route('/login')
 
     })
     .post((req, res) => {
+
         const Login_uname = req.body.uname;
         const Login_pswd = req.body.pswd;
 
@@ -106,6 +109,7 @@ router.route('/login')
 
 router.route('/new')
     .get((req, res) => {
+        
         // var data = JSON.parse(store.get('userArray') || '[]');
         // if(data === '[]'){
         //     res.redirect('login',{notlogged:'1'});
@@ -120,6 +124,7 @@ router.route('/new')
 
     })
     .post((req, res) => {
+        
         //console.log(req.body); 
 
 
@@ -217,11 +222,13 @@ router.route('/new')
 
 router.route('/:userID')
     .get((req, res) => {
+        
         console.log(req.params.userID);
 
         const userids = req.params.userID;
         if (userids === '') {
         // console.log("User Doesn't exist");
+            res.status(404)
             res.render('404', {
                 alert: {
                     type: 'warning',
@@ -266,6 +273,7 @@ router.route('/:userID')
         }
         else {
             console.log("User Doesn't exist");
+            res.status(404);
             res.render('404', {
                 alert: {
                     type: 'warning',
@@ -281,6 +289,7 @@ router.route('/:userID')
 
     })
     .post((req, res) => {
+    
         console.log(req.body);
         const upduuid = req.body.upduuid;
         const updUserName = req.body.upduname;

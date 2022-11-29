@@ -8,7 +8,7 @@ const { default: Conf } = require('conf');
 const store = new Conf();
 
 
-//store.clear();
+store.clear();
 
 const router = new express.Router();
 //const loggedInStatus = True;
@@ -72,7 +72,22 @@ router.route('/login')
             }
         }
         indy = store.get('index')
-        var uids=data[indy].uniqId
+       
+        if(indy == undefined && data == ''){
+            res.render('login', {
+                notlogged: '1', message: {
+                    type: 'warning',
+                    title: 'No users in the system! Sign up first'
+                }
+            });
+
+
+        }
+        else
+        {
+            var uids=data[indy].uniqId
+
+        }
 
         if (flg == '1') {
             res.redirect(`/${uids}`);

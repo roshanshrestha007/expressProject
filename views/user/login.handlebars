@@ -1,4 +1,10 @@
-  <form method="POST" class="was-validated">
+  <div className="container mb-5">
+            <div className="box justify-content-center">
+                <h1 class="display-4 page-header">Log In</h1>
+                <br>
+  
+  
+    <form method="POST" class="was-validated">
                 <div class="mb-3 mt-3">
                   <label for="uname" class="form-label">Username:</label>
                   <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
@@ -13,9 +19,11 @@
                 </div>
               <button type="submit" class="btn btn-primary">Sign In</button>
               </form>
+              </div>
 
               {{#if message}}
         <div class="alert alert-{{message.type}}" role="alert">
             <h4 class="alert-heading">{{message.title}}</h4>
         </div>
         {{/if}}
+  </div>

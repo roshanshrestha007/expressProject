@@ -6,50 +6,40 @@ const { default: Conf } = require('conf');
 
 const store = new Conf();
 
-// const allUser = ({
-//     userName: "",
-//     userEmail: "",
-//     userPassword: "",
-//     userPassword2: "",
-//     userPhone: ""
-// })
 
 const router = new express.Router();
 
-// app.use(require('./models/User'));
 
 
 router.route('/login')
     .get((req,res)=>{
-        res.render('login',{});
+        var data = JSON.parse(store.get('userArray') || '[]');
+        var ind = store.get('index');
+
+        if(data === '[]'){
+            res.render('login',{notlogged:'1'});
+
+        }
+        else{
+            var data = JSON.parse(store.get('userArray') || '[]');
+            var ind = store.get('index');
+
+            const username = data[ind].uname;
+
+            res.render('login',{logged:'1',userName: username});
+
+        }
+
     })
     .post((req,res)=> {
-        // console.log(req.body);
         const Login_uname = req.body.uname;
         const Login_pswd = req.body.pswd;
-        // console.log(Login_uname);
-        // console.log(Login_pswd);
 
 
         var data = JSON.parse(store.get('userArray') || '[]');
         console.log(data);
-        //console.log(data.length);
 
-        console.log("wwwwwwwwww")
-
-        console.log(data[1].username , "\n here we go\n");
-       
-        console.log(data[3]);
         console.log("Before for loop");
-
-        console.log(Login_uname);
-        console.log(Login_pswd);
-
-        // if(Login_uname === data[3].username){
-        //     console.log("the comparision works")
-        // }else{
-        //     console.log("logic has issue")
-        // }
         console.log("The size of array is :" + data.length);
 
         for(let i = 0;i < data.length;i++){
@@ -64,7 +54,6 @@ router.route('/login')
             else{
                 console.log("The else statement")
                 var flg = '0';
-                //break;
             }
         }
 
@@ -76,9 +65,8 @@ router.route('/login')
                 message: {
                     type: 'warning',
                     title: 'Account details donot match',
-                }
+                }, notlogged:'1'
             })
-            // res.redirect('/login')
         }
 
 
@@ -86,7 +74,18 @@ router.route('/login')
 
 router.route('/new')
     .get((req,res)=>{
-        res.render('new',{});
+        // var data = JSON.parse(store.get('userArray') || '[]');
+        // if(data === '[]'){
+        //     res.redirect('login',{notlogged:'1'});
+        // }
+        // else{
+        //     const ind = store.get('index');
+        //     const username = data[ind].uname;
+
+        // res.render('new',{logged:'1', userName: username});
+        // }
+        res.render('new',{notlogged:'1'});
+
     })
     .post((req,res)=> {
         //console.log(req.body);    
@@ -120,7 +119,6 @@ router.route('/new')
             else{
                 console.log("The else statement")
                 var flgSign = '0';
-                //break;
             }
         }
 
@@ -130,7 +128,7 @@ router.route('/new')
                 message: {
                     type: 'warning',
                     title: 'Username is taken',
-                }
+                }, notlogged:'1'
             })
         }
         else if(flgSign == '2')
@@ -140,7 +138,7 @@ router.route('/new')
                 message: {
                     type: 'warning',
                     title: 'User with this Email already exist',
-                }
+                }, notlogged:'1'
             })
         }
         else if (!username || !email || !pswd1 || !phno || pswd1 !== pswd2) {
@@ -149,7 +147,7 @@ router.route('/new')
                 message: {
                     type: 'warning',
                     title: 'Password donot match',
-                }
+                }, notlogged:'1'
             })
                     
                      
@@ -177,7 +175,7 @@ router.route('/new')
         console.log("we are here \n");
         console.log(allUser[0].email);
         
-         res.redirect(`/login`);
+         res.redirect('login');
 
         }
 
@@ -193,8 +191,18 @@ router.route('/new')
 router.route('/:userID')
     .get((req,res)=>{
         console.log(req.params.userID);
-        // res.send({userName: req.params.userID});
         const userName = req.params.userID;
+        if(userName == ''){
+            console.log("User Doesn't exist");
+            res.render('404',{
+                alert: {
+                    type: 'warning',
+                    title: 'Page donot exist',
+                }, notlogged:'1'
+            })
+            
+
+        }
         console.log(userName);
 
         var data = JSON.parse(store.get('userArray') || '[]');
@@ -209,13 +217,6 @@ router.route('/:userID')
             }
             else{
                 var UseFlg = '0';
-            //     res.render('new',{
-            //         message: {
-            //             type: 'warning',
-            //             title: 'Password donot match',
-            //         }
-                
-            // }
             }
 
         }
@@ -227,8 +228,9 @@ router.route('/:userID')
             console.log(DisPhno);
             const DisPwd = data[ind].pswd1;
 
-
-            res.render('user',{userName: req.params.userID, email: DisEmail, phno: DisPhno, password: DisPwd});
+            res.render('user',{
+                logged:'1', userName: req.params.userID, email: DisEmail, phno: DisPhno, password: DisPwd, message: req.flash('message')
+            });
 
         }
         else{
@@ -237,7 +239,7 @@ router.route('/:userID')
                 alert: {
                     type: 'warning',
                     title: 'Page donot exist',
-                }
+                }, notlogged:'1', userName: req.params.userID
             })
                 
 
@@ -246,16 +248,15 @@ router.route('/:userID')
 
 
 
-        // res.send(`${req.params.uname}`);
     })
     .post((req,res)=> {
         console.log(req.body);
         const updUserName = req.body.upduname;
         const updUserEmail = req.body.updemail;
         const updUserPhone = req.body.updphno;
+        const updUserPass = req.body.psw1;
 
         console.log("\n\n\n\n\n\n This is the update part")
-        //console.log(req.body.upduname)
         console.log(updUserName)
         console.log(updUserEmail)
         console.log(updUserPhone)
@@ -263,11 +264,10 @@ router.route('/:userID')
 
         var usrs = JSON.parse(store.get('userArray')|| '[]')
         for(let i =0;i<usrs.length;i++){
-            if(updUserName === usrs[i].username){
+            if(updUserName === usrs[i].username && updUserPass === usrs[i].pswd1){
                 store.set('index',i);
                 var userFlg = '1';
                 break;
-                //console.log("success");
             }
             else{
                 var userFlg = '0';
@@ -278,25 +278,21 @@ router.route('/:userID')
         usrs[store.get('index')].username = updUserName;
         usrs[store.get('index')].email = updUserEmail;
         usrs[store.get('index')].phno = updUserPhone;
-       //req.params.userID = updUserName;
         console.log(usrs);
         store.set('userArray', JSON.stringify(usrs));
         console.log("\n\n This is the array after updating");
         console.log(JSON.parse(store.get('userArray'|| '[]')))
         console.log("user before",updUserName);
 
+        req.flash('message', 'Success!')
+
         res.redirect(`/${updUserName}`);
         console.log("user after",updUserName);
 
-        // res.render('user',{userName: updUserName, email: updUserEmail, phno: updUserPhone},{
-        //     alert: {
-        //         type: 'warning',
-        //         title: 'User Updated',
-        //     }
-        // });
-        // res.redirect(`/${updUserName}`);
 
 
 })
+
+
 
 module.exports = router;

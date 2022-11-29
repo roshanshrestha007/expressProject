@@ -1,11 +1,10 @@
- {{#if alert}}
-        <div class="alert alert-{{alert.type}}" role="alert">
-            <h4 class="alert-heading">{{alert.title}}</h4>
-            <p>{{alert.message}}</p>
+           {{#if message}}
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">{{{message}}}</h4>
         </div>
         {{/if}}
 
-<div class="container">
+            <div class="container">
             <div class="box justify-content-center">
             <h1 class="display-4 page-header">Update Information</h1>
             <br>
@@ -39,7 +38,12 @@
                   <br>
                 <button type="submit" class="btn btn-primary">Update</button>
               </form>
-
+ {{#if mesg}}
+        <div class="alert alert-{{mesg.type}}" role="alert">
+            <h4 class="alert-heading">{{mesg.title}}</h4>
+        </div>
+        {{/if}}
 
         </div>
         </div>
+ 

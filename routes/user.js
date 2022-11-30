@@ -9,35 +9,32 @@ const { default: Conf } = require('conf');
 const store = new Conf();
 
 
-//store.clear();
-
 const router = new express.Router();
-//const loggedInStatus = True;
+
 
 
 
 router.route('/login')
     .get((req, res) => {
-        //loginget();
+
         var data = JSON.parse(store.get('userArray') || '[]');
-        console.log(' inside login \n' + data);
         var ind = store.get('index');
-        console.log(ind)
+
 
         if (data == '' && ind == undefined) {
 
-            console.log("inside if stare..")
+
             res.render('login', {
                 notlogged: '1', message: {
                     type: 'warning',
                     title: 'No users in the system! Sign up first'
                 }
             });
-            // res.redirect()
+            
         }
         else {
 
-            console.log("inside else");
+            
             var data = JSON.parse(store.get('userArray') || '[]');
             var ind = store.get('index');
 
@@ -57,20 +54,16 @@ router.route('/login')
         var data = JSON.parse(store.get('userArray') || '[]');
         console.log(data);
 
-        console.log("Before for loop");
         console.log("The size of array is :" + data.length);
 
         for (let i = 0; i < data.length; i++) {
-            console.log("loop  " + i)
+            
             if ((Login_uname === data[i].username) && (Login_pswd === data[i].pswd1)) {
-                console.log("success");
                 store.set('index', i);
-                console.log(store.get('index'));
                 var flg = '1';
                 break;
             }
             else {
-                console.log("The else statement")
                 var flg = '0';
             }
         }
@@ -110,25 +103,11 @@ router.route('/login')
 router.route('/new')
     .get((req, res) => {
         
-        // var data = JSON.parse(store.get('userArray') || '[]');
-        // if(data === '[]'){
-        //     res.redirect('login',{notlogged:'1'});
-        // }
-        // else{
-        //     const ind = store.get('index');
-        //     const username = data[ind].uname;
-
-        // res.render('new',{logged:'1', userName: username});
-        // }
         res.render('new', { notlogged: '1' });
 
     })
     .post((req, res) => {
         
-        //console.log(req.body); 
-
-
-
         const uniqId = uuid.v1();
         const username = req.body.uname;
         const email = req.body.email;
@@ -136,17 +115,12 @@ router.route('/new')
         const pswd2 = req.body.psw2;
         const phno = req.body.phoneno;
 
-        console.log(email);
-
 
         var Signupdata = JSON.parse(store.get('userArray') || '[]');
 
         for (let i = 0; i < Signupdata.length; i++) {
-            console.log("loop  " + i)
-            if ((username === Signupdata[i].username)) {
+                if ((username === Signupdata[i].username)) {
                 console.log("username taken");
-                // store.set('index',i);
-                // console.log(store.get('index'));
                 var flgSign = '1';
                 break;
             }
@@ -157,7 +131,6 @@ router.route('/new')
 
             }
             else {
-                console.log("The else statement")
                 var flgSign = '0';
             }
         }
@@ -185,7 +158,7 @@ router.route('/new')
             res.render('new', {
                 message: {
                     type: 'warning',
-                    title: 'Password donot match',
+                    title: 'Password does not match',
                 }, notlogged: '1'
             })
 
@@ -206,12 +179,12 @@ router.route('/new')
             store.set('userArray', JSON.stringify(newUser));
 
             const allUser = JSON.parse(store.get('userArray' || '[]'));
-            //store.clear();
+            
             console.log(allUser);
             console.log(allUser.length);
             const i = allUser.length - 1;
             store.set('index', i);
-            console.log("we are here \n");
+            
             console.log(allUser[0].email);
 
             res.redirect('login');
@@ -223,29 +196,25 @@ router.route('/new')
 router.route('/:userID')
     .get((req, res) => {
         
-        console.log(req.params.userID);
-
         const userids = req.params.userID;
         if (userids === '') {
-        // console.log("User Doesn't exist");
             res.status(404)
             res.render('404', {
                 alert: {
                     type: 'warning',
-                    title: 'Page donot work',
+                    title: 'Page does not work',
                 }, notlogged: '1'
             })
 
 
         }
-        console.log(userids);
+
 
         var data = JSON.parse(store.get('userArray') || '[]');
 
         for (let i = 0; i < data.length; i++) {
             if (userids === data[i].uniqId) {
                 store.set('index', i);
-                console.log("success");
                 var UseFlg = '1';
                 break;
 
@@ -260,9 +229,8 @@ router.route('/:userID')
             const uniqid = data[ind].uniqId;
             const DisEmail = data[ind].email;
 
-            console.log(DisEmail);
+
             const DisPhno = data[ind].phno;
-            console.log(DisPhno);
             const DisPwd = data[ind].pswd1;
             const uName = data[ind].username;
 
@@ -272,12 +240,12 @@ router.route('/:userID')
 
         }
         else {
-            console.log("User Doesn't exist");
+           
             res.status(404);
             res.render('404', {
                 alert: {
                     type: 'warning',
-                    title: '404 Page doesnot exist!!',
+                    title: '404 Page does not exist!!',
                 }, notlogged: '1' 
             })
 
@@ -297,15 +265,7 @@ router.route('/:userID')
         const updUserPhone = req.body.updphno;
         const updUserPass = req.body.psw1;
 
-        console.log("\n\n\n\n\n\n This is the update part")
-        console.log(updUserName)
-        console.log(updUserEmail)
-        console.log(updUserPhone)
-
-
         var usrs = JSON.parse(store.get('userArray') || '[]')
-
-
 
         for (let i = 0; i < usrs.length; i++) {
             if (upduuid === usrs[i].uniqId) {
@@ -321,7 +281,6 @@ router.route('/:userID')
 
         if(userFlg ='1'){
 
-            console.log("hare ram hare ram\n");
             const indx = store.get('index');
             console.log(usrs[indx].username);
             var uidz = usrs[indx].uniqId;
@@ -329,8 +288,6 @@ router.route('/:userID')
             for (let j = 0; j < usrs.length; j++) {
                 if ((usrs[j].username === updUserName ) && (upduuid !== usrs[j].uniqId)) {
                     console.log("username taken");
-                    // store.set('index',i);
-                    // console.log(store.get('index'));
                     var updflag = '1';
                     break;
                 }
@@ -361,10 +318,7 @@ router.route('/:userID')
             usrs[store.get('index')].phno = updUserPhone;
             console.log(usrs);
             store.set('userArray', JSON.stringify(usrs));
-            console.log("\n\n This is the array after updating");
             console.log(JSON.parse(store.get('userArray' || '[]')))
-            console.log("user before", updUserName);
-
             req.flash('message', 'User Successfully updated!')
 
 
@@ -382,16 +336,8 @@ router.route('/:userID')
             req.flash('message', 'Unique id doesnot match');
             res.redirect(`/${uidz}`);
 
-
-
-
         }
-
-
-
-
-            
-        })
+    })
 
 
 
